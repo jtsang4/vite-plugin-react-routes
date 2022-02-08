@@ -9,7 +9,7 @@ import { generateCode } from './generator'
 const virtualModuleId = 'virtual:generated-react-router'
 const resolvedVirutalModuleId = `\0${virtualModuleId}`
 
-export default function VitePluginReactRouter(userOptions: UserOptons): PluginOption {
+export default function VitePluginReactRouter(userOptions?: UserOptons): PluginOption {
   const { routesFile = './routes.json' } = userOptions || {}
 
   const routesStr = fs.readFileSync(
