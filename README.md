@@ -1,5 +1,8 @@
 # vite-plugin-react-routes
 
+[![NPM version](https://img.shields.io/npm/v/vite-plugin-react-routes?color=a1b858&label=)](https://www.npmjs.com/package/vite-plugin-react-routes)
+
+
 > Inspired by [vite-plugin-react-router](https://github.com/morelearn1990/vite-plugin-react-router)
 
 A vite plugin support setup React Router by JSON config file.
@@ -82,8 +85,6 @@ This is API for `virtual:generated-react-router`:
 * type: `'browser' | 'hash'`
 
 use `<BrowserRouter>` or `<HashRouter>`
-
-[![NPM version](https://img.shields.io/npm/v/vite-plugin-react-routes?color=a1b858&label=)](https://www.npmjs.com/package/vite-plugin-react-routes)
 
 ## License
 
