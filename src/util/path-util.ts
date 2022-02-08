@@ -1,3 +1,4 @@
+import path from 'path'
 import jiti from 'jiti'
 import upperCamelcase from 'uppercamelcase'
 
@@ -11,9 +12,11 @@ function winPath(path: string) {
 }
 
 export function transformRelativePathToAbsPath(rPath: string, basePath = './src'): string {
+  const joinedPath = path.join(basePath, rPath)
+  const targetPath = joinedPath.startsWith('/') ? joinedPath : `./${joinedPath}`
   const absPath = jiti(process.cwd(), {
     extensions: ['.js', '.mjs', '.cjs', '.ts', '.jsx', '.tsx'],
-  }).resolve(`${basePath}/${rPath}`)
+  }).resolve(`${targetPath}`)
   return winPath(absPath)
 }
 
