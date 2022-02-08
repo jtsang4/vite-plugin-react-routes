@@ -1,18 +1,54 @@
-export default function myPlugin() {
-  const virtualModuleId = '@my-virtual-module'
-  const resolvedVirtualModuleId = `\0${virtualModuleId}`
+import fs from 'fs'
+import path from 'path'
+import type { Plugin } from 'vite'
+import { transformWithEsbuild } from 'vite'
+import { transform } from 'esbuild'
+import type { UserOptons } from './typing'
+import { generateCode } from './generator'
+
+const virtualModuleId = 'virtual:vite-plugin-react-router'
+const resolvedVirutalModuleId = `\0${virtualModuleId}`
+
+export default function VitePluginReactRouter(userOptions: UserOptons): Plugin {
+  const { routesFile = './routes.json' } = userOptions || {}
+
+  const routesStr = fs.readFileSync(
+    path.resolve(process.cwd(), routesFile),
+    'utf-8',
+  )
+
+  const routes = JSON.parse(routesStr)
+
+  const codeStr = generateCode(routes)
+
+  let command: string
 
   return {
-    name: 'my-plugin', // 必须的，将会在 warning 和 error 中显示
+    name: 'vite-plugin-react-router',
+    configResolved(config) {
+      command = config.command
+    },
     resolveId(id: string) {
       if (id === virtualModuleId) {
-        return resolvedVirtualModuleId
+        return resolvedVirutalModuleId
       }
       return null
     },
     load(id: string) {
-      if (id === resolvedVirtualModuleId) {
-        return 'export const msg = "from virtual module"'
+      if (id === resolvedVirutalModuleId) {
+        return codeStr
+      }
+      return null
+    },
+    async transform(code: string, id: string) {
+      if (id === resolvedVirutalModuleId) {
+        const esbuildResult =
+          command === 'serve'
+            ? await transformWithEsbuild(code, '/vite-plugin-react-router', {
+              loader: 'tsx',
+            })
+            : await transform(code, { loader: 'tsx' })
+        return esbuildResult.code
       }
       return null
     },
