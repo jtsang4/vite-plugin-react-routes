@@ -4,6 +4,7 @@ export default defineBuildConfig({
   entries: [
     'src/index',
   ],
+  externals: ['jiti', 'vite'],
   declaration: true,
   clean: true,
   rollup: {

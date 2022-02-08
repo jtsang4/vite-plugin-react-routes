@@ -1,15 +1,15 @@
 import fs from 'fs'
 import path from 'path'
-import type { Plugin } from 'vite'
+import type { PluginOption } from 'vite'
 import { transformWithEsbuild } from 'vite'
 import { transform } from 'esbuild'
 import type { UserOptons } from './typing'
 import { generateCode } from './generator'
 
-const virtualModuleId = 'virtual:vite-plugin-react-router'
+const virtualModuleId = 'virtual:generated-react-router'
 const resolvedVirutalModuleId = `\0${virtualModuleId}`
 
-export default function VitePluginReactRouter(userOptions: UserOptons): Plugin {
+export default function VitePluginReactRouter(userOptions: UserOptons): PluginOption {
   const { routesFile = './routes.json' } = userOptions || {}
 
   const routesStr = fs.readFileSync(
@@ -52,5 +52,5 @@ export default function VitePluginReactRouter(userOptions: UserOptons): Plugin {
       }
       return null
     },
-  }
+  } as PluginOption
 }
